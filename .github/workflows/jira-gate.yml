@@ -1,7 +1,7 @@
 name: Deploy with Jira Gating
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   deploy:
@@ -10,17 +10,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check Jira Gating Status
-        uses: actions/github-script@v3
-        with:
-          script: |
-            // Assume 'context' and 'github' are available in this script
-            const jiraGatingStatus = await checkJiraGatingStatus();
-            if (jiraGatingStatus !== 'ALLOWED') {
-              core.setFailed('Deployment not allowed by Jira');
-            }
-      
-      - name: Deploy if Allowed
+      - name: Poll Jira for Gating Status
+        id: jira_check
         run: |
-          echo "Deploying to production..."
-          # Add your deployment script here
+          echo "Polling Jira for deployment gating status..."
+          # Placeholder for integration logic
+          # The actual status check will be handled by the GitHub for Jira integration
+
+      - name: Deploy if Approved
+        if: steps.jira_check.outputs.gating_status == 'APPROVED'
+        run: |
+          echo "Deployment approved by Jira. Proceeding with deployment."
+          # Your deployment script here
+
+      - name: Fail if Not Approved
+        if: steps.jira_check.outputs.gating_status != 'APPROVED'
+        run: |
+          echo "Deployment not approved by Jira. Exiting."
+          exit 1
