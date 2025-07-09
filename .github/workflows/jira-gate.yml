@@ -1,7 +1,7 @@
-name: Deploy to Production
+name: Deploy with Jira Gating
 
 on:
-  workflow_dispatch:  # Allows manual triggering or API triggering
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -10,15 +10,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check Jira Conditions
-        run: |
-          # Simulate checking a condition from Jira
-          if [[ "$JIRA_CONDITION" != "true" ]]; then
-            echo "Deployment conditions not met."
-            exit 1
-          fi
-
-      - name: Deploy to Production
+      - name: Check Jira Gating Status
+        uses: actions/github-script@v3
+        with:
+          script: |
+            // Assume 'context' and 'github' are available in this script
+            const jiraGatingStatus = await checkJiraGatingStatus();
+            if (jiraGatingStatus !== 'ALLOWED') {
+              core.setFailed('Deployment not allowed by Jira');
+            }
+      
+      - name: Deploy if Allowed
         run: |
           echo "Deploying to production..."
           # Add your deployment script here
