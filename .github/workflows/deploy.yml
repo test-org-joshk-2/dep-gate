@@ -1,0 +1,42 @@
+name: Deploy ME
+
+on:
+  # This workflow can be triggered manually or on push to the main branch
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build project
+      run: npm run build
+
+    - name: Run tests
+      run: npm test
+
+    - name: Mock Deploy Step
+      if: success()  # Only run this step if all previous steps succeeded
+      run: |
+        echo "Deploying application..."
+        # Simulate deployment by echoing a message
+        echo "Deployment to production environment successful!"
+
+    - name: Notify Completion
+      if: always()  # This step runs regardless of previous success or failure
+      run: |
+        echo "Deployment workflow completed."
