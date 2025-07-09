@@ -1,0 +1,24 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:  # Allows manual triggering or API triggering
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check Jira Conditions
+        run: |
+          # Simulate checking a condition from Jira
+          if [[ "$JIRA_CONDITION" != "true" ]]; then
+            echo "Deployment conditions not met."
+            exit 1
+          fi
+
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to production..."
+          # Add your deployment script here
