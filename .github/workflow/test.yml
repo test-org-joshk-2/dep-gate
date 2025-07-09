@@ -1,0 +1,19 @@
+name: Deploy with Jira Approval
+
+on:
+  workflow_dispatch:
+  issues:
+    types: [labeled]
+
+jobs:
+  deploy:
+    if: contains(github.event.label.name, 'approved-for-deploy')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to production..."
+          # Add your deployment script here
