@@ -1,0 +1,13 @@
+name: Deploy with Approval
+on:
+  workflow_dispatch: # Allows manual triggering via the GitHub API
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to production..."
+          # Add your deployment script here
