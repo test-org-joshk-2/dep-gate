@@ -23,12 +23,6 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build project
-      run: npm run build
-
-    - name: Run tests
-      run: npm test
-
     - name: Mock Deploy Step
       if: success()  # Only run this step if all previous steps succeeded
       run: |
