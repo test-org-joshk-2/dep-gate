@@ -1,7 +1,8 @@
 name: Deploy with Jira Gating
 
 on:
-  workflow_dispatch:  # Manually triggered
+  deployment_status:
+    types: [success]  # Triggered when the deployment status is marked as successful
 
 jobs:
   deploy:
@@ -10,15 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Wait for Jira Approval
-        id: jira_approval
-        run: |
-          echo "Waiting for Jira approval..."
-          # Simulate waiting for approval
-          # Ideally, this would be replaced with actual code to wait for a status change
-
       - name: Deploy if Approved
-        if: always()  # Ensures this runs after the wait step
         run: |
-          echo "Proceeding with deployment..."
-          # Add your deployment script here
+          echo "Deployment approved by Jira. Proceeding with deployment."
+          # Your deployment script here
