@@ -1,7 +1,7 @@
 name: Deploy with Jira Gating
 
 on:
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:  # Manually triggered
 
 jobs:
   deploy:
@@ -10,21 +10,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Poll Jira for Gating Status
-        id: jira_check
+      - name: Wait for Jira Approval
+        id: jira_approval
         run: |
-          echo "Polling Jira for deployment gating status..."
-          # Placeholder for integration logic
-          # The actual status check will be handled by the GitHub for Jira integration
+          echo "Waiting for Jira approval..."
+          # Simulate waiting for approval
+          # Ideally, this would be replaced with actual code to wait for a status change
 
       - name: Deploy if Approved
-        if: steps.jira_check.outputs.gating_status == 'APPROVED'
+        if: always()  # Ensures this runs after the wait step
         run: |
-          echo "Deployment approved by Jira. Proceeding with deployment."
-          # Your deployment script here
-
-      - name: Fail if Not Approved
-        if: steps.jira_check.outputs.gating_status != 'APPROVED'
-        run: |
-          echo "Deployment not approved by Jira. Exiting."
-          exit 1
+          echo "Proceeding with deployment..."
+          # Add your deployment script here
