@@ -1,8 +1,9 @@
-name: Deploy with Jira Gating
+name: Deploy
 
 on:
-  deployment_status:
-    types: [success]  # Triggered when the deployment status is marked as successful
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -11,27 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check Jira Issue State
-        id: jira-check
+      - name: Deploy to environment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          JIRA_ISSUE_KEY=YOUR_ISSUE_KEY # Replace with your actual Jira issue key
-          JIRA_API_TOKEN=YOUR_JIRA_API_TOKEN # Replace with your Jira API token
-          JIRA_USER_EMAIL=YOUR_EMAIL # Replace with the email associated with the Jira account
-
-          # Check the issue status
-          ISSUE_STATUS=$(curl -s -u $JIRA_USER_EMAIL:$JIRA_API_TOKEN \
-            -X GET \
-            -H "Content-Type: application/json" \
-            "https://your-domain.atlassian.net/rest/api/3/issue/$JIRA_ISSUE_KEY" | jq -r '.fields.status.name')
-
-          echo "Issue status: $ISSUE_STATUS"
-
-          if [[ "$ISSUE_STATUS" != "Approved" ]]; then
-            echo "Jira issue is not in Approved state. Failing the job."
-            exit 1
-          fi
-
-      - name: Deploy if Approved
-        run: |
-          echo "Deployment approved by Jira. Proceeding with deployment."
-          # Your deployment script here
+          echo "Deploying to the environment"
+          # Add your deployment script/command here
