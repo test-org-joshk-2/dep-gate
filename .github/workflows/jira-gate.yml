@@ -1,21 +1,32 @@
-name: Deploy
+name: Deploy to Production
 
 on:
   push:
     branches:
-      - main
+      - main  # Adjust this to your deployment branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production 
+    environment:
+      name: Production  # This should match the environment in your settings
+      url: https://your-environment-url.com  # Optional, for linking to your environment
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy to environment
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Adjust based on your needs
+
+      - name: Install dependencies
+        run: npm install
+
+      # Example of using deployment gating
+      - name: Deploy to Production
+        if: github.event_name == 'deployment' && github.event.deployment_status.state == 'success'
         run: |
-          echo "Deploying to the environment"
-          # Add your deployment script/command here
+          echo "Deploying to production"
+          # Your deployment script here, e.g., npm run deploy
