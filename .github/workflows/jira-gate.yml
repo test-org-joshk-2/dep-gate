@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: production  # This should match the environment in your settings
+      name: Production  # This should match the environment in your settings
       url: https://your-environment-url.com  # Optional, for linking to your environment
 
     steps:
