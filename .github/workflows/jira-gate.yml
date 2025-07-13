@@ -9,8 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: Production  # This should match the environment in your settings
-      url: https://your-environment-url.com  # Optional, for linking to your environment
+      name: Staging  # This should match the environment in your settings
 
     steps:
       - name: Checkout code
@@ -25,8 +24,8 @@ jobs:
         run: npm install
 
       # Example of using deployment gating
-      - name: Deploy to Production
+      - name: Deploy to Stg
         if: github.event_name == 'deployment' && github.event.deployment_status.state == 'success'
         run: |
-          echo "Deploying to production"
+          echo "Deploying to stg"
           # Your deployment script here, e.g., npm run deploy
